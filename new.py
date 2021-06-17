@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import zipfile
-
+import json 
+import mysql.connector
+  
 from xml.dom import minidom
 from xml.dom.minidom import Document
 import subprocess
@@ -25,6 +27,19 @@ def kmz_to_kml(fname):
             out.close()
         else:
             print("no kml file")
+
+def registrarKMZEnBD(kmzNum, tipo):
+    mydb = mysql.connector.connect(
+    host="3.15.161.179", 
+    user="root", 
+    passwd = "Uzon1234$", 
+    database="sistemaene"
+    ) 
+    cursor = mydb.cursor()
+    sql = 'insert into rpus(tipo, tarifa, total, rpunumero, municipio) values (%s, 100, 200, %s, 1);'
+    val = (tipo, kmzNum)
+    cursor.execute(sql, val)
+    return cursor.lastrowid
 
 def iniciar(argArchivo):
     fname = r'%s' %(argArchivo)
